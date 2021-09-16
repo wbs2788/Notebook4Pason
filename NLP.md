@@ -1,5 +1,7 @@
 # NLP
 
+[TOC]
+
 ## 第一章 绪论
 
 ### 课前说明
@@ -163,11 +165,21 @@ $$
 
 #### 语言描述的三种途径
 
-穷举法、语法描述、自动机
+##### 穷举法
+
+适合于句子数目有限的语言
+
+##### 语法描述
+
+生成语言中合格的句子、自动机
+
+##### 自动机
+
+对输入的句子进行检验，区别哪些是语言中的句子，哪些不是。
 
 #### 直观意义
 
-精确描述语言及其结构的手段，以重写规则$\alpha \to \beta$的形式表示。其中$\alpha$、$\beta$均为字符串。
+精确描述语言及其结构的手段，以重写规则$\alpha \to \beta$的形式表示。其中$\alpha$、$\beta$均为字符串。一个初步的字符串通过不断地运用重写规则就可以得到新的字符串。
 
 #### 形式语法的定义
 
@@ -175,10 +187,18 @@ $$
 
 如：$G=(\{A,S\},\{0,1\},P,S)$，$P:S\to 0A1,0A\to00A1,A\to1$
 
-设$G=(N,\Sigma,P,S)$是一个文法，在$V=N\cup\Sigma $上定义关系：若$\alpha\beta\gamma$是$V=N\cup\Sigma $中的符号串，且$\beta\to\delta$是P的产生式，那么：
+设$G=(N,\Sigma,P,S)$是一个文法，在$(N\cup\Sigma)^* $（\*代表闭包）上定义关系：若$\alpha\beta\gamma$是$(N\cup\Sigma)^* $中的符号串，且$\beta\to\delta$是P的产生式，那么：
 $$
 \alpha\beta\gamma\Rightarrow_G\alpha\beta\gamma
 $$
+
+#### 推导的定义
+
+用$\Rightarrow^+_G$（按非平凡方式派生）表示$\Rightarrow_G$的传递闭包。
+
+用$\Rightarrow^*_G$（派生）表示$\Rightarrow_G$的自反和传递闭包。
+
+如果清楚某个推导是文法G所产生的，则上面符号G可省略。
 
 ##### 最左推导
 
@@ -188,15 +208,29 @@ $$
 
 每步推导中只改写最右边的非终止符。
 
+#### 句子和句型
+
+一些特殊类型的符号串是文法$G=(N,\Sigma,P,S)$的句子形式：1）S是一个句子形式；2）如果$\alpha\beta\gamma$是一个句子形式，且$\beta\to\sigma$是$P$的产生式，则$\alpha\beta\gamma$是一个句子形式。
+
+文法$G$的不含非终结符的句子形式被称为G生成的句子。由文法$G$生成的语言，记作$L(G)$，指$G$生成的所有句子的集合。即：$L(G)=\{x|x\in\Sigma,S\Rightarrow^+_Gx\}$
+
 #### 正则文法
 
-如果文法$G=(N,\Sigma,P,S)$的$P$中的规则满足：$A\to Bx$或$A\to x$，其中A、B
+如果文法$G=(N,\Sigma,P,S)$的$P$中的规则满足：$A\to Bx$或$A\to x$，其中$A$、$B\in N,x\in\Sigma$，则称该文法为正则文法或称3型文法。
+
+如果$A\to xB$，则该文法称为**右线性正则文法**。
 
 #### 上下文无关文法
 
-$P$中的规则满足：$A\to\alpha$
+$P$中的规则满足：$A\to\alpha$，其中$A\in N,\alpha\in (N\cup\Sigma)^*$，则称该文法为**上下文无关文法**。
 
+#### 上下文有关文法
 
+$P$中的规则满足：$\alpha A\beta\to \alpha\gamma\beta$，其中$A\in N,\alpha,\beta,\gamma\in(N\cup\Sigma)^*$，且$\gamma$至少包含一个字符，则该文法为**上下文有关文法**。
+
+#### 无约束文法（无限制重写系统）
+
+如果$P$中的规则满足如下形式：$\alpha \to\beta$，$\alpha,\beta$是字符串，则称$G$是**无约束文法**。
 
 ### 有限自动机与正则文法
 
@@ -204,9 +238,46 @@ $P$中的规则满足：$A\to\alpha$
 
 $M=(\Sigma,Q,\delta,q_0,F)$
 
-字母表$\Sigma$，状态集$Q$，转移函数$\delta$，初始状态$q_0$，终止状态$F$
+字母表$\Sigma$，状态集$Q$，转移函数$\delta \in Q\times\Sigma\to Q$，初始状态$q_0$，终止状态$F$。
 
-#### DFA
+##### 状态变换图
+
+![image-20210916204703030](C:\Users\surafce book2\AppData\Roaming\Typora\typora-user-images\image-20210916204703030.png)
+
+##### DFA定义的语言
+
+如果一个句子$x$使得有限自动机$M$有：$\delta(q_0,x)=p,p\in F$，那么称句子$x$被$M$接受。由$M$定义的语言$T(M)$就是**被$M$接受的句子的全集**，即：
+$$
+T(M)=\{x|\delta(q_0,x)\in F\}
+$$
+
+举例：
+
+![image-20210916212325423](C:\Users\surafce book2\AppData\Roaming\Typora\typora-user-images\image-20210916212325423.png)
+
+#### 不确定有限自动机
+
+$M=(\Sigma,Q,\delta,q_0,F)$
+
+字母表$\Sigma$，状态集$Q$，转移函数$\delta \in Q\times\Sigma\to 2^Q$，初始状态$q_0$，终止状态$F$。
+
+#### DFA与NFA区别与联系
+
+##### 区别
+
+NFA中$\delta$对应一个状态集合，而DFA中$\delta$是一个状态。
+
+##### 关系
+
+设L是一个被NFA接受的句子的集合，则存在一个DFA，他能接受L。
+
+#### 正则文法与有限自动机的关系
+
+若$G=(V_N,V_T,P,S)$是一个正则文法，则存在一个DFA $M$，使得：$T(M)=L(G)$。
+
+##### 由正则文法构造DFA的步骤
+
+
 
 ### 下退自动机与CFG
 
