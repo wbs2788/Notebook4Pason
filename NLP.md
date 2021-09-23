@@ -273,13 +273,27 @@ NFA中$\delta$对应一个状态集合，而DFA中$\delta$是一个状态。
 
 #### 正则文法与有限自动机的关系
 
-若$G=(V_N,V_T,P,S)$是一个正则文法，则存在一个DFA $M$，使得：$T(M)=L(G)$。
-
 ##### 由正则文法构造DFA的步骤
 
+令$\Sigma=V_T,Q=v_N\cup\{T\},q_0=S$，其中T是一个新增加的非终结符。
 
+- 如果在$P$中有产生式 $S\to\epsilon$，则$F=\{S,T\}$，否则$F=\{T\}$。
+- 如果在$P$中有产生式 $B\to a,B\in V_N,a\in V_T$，则$T\in\delta(B,a)$。
+- 如果在$P$中有产生式 $B\to aC,B,C\in V_N,a\in V_T$，则$C\in\delta(B,a)$。
+- 对于每一个$a\in V_T$，有$\delta(T,a)=\empty$。
 
-### 下退自动机与CFG
+定理：如果$G=(V_N,V_T,P,S)$是一个正则文法，则存在一个DFA $M$，使得：$T(M)=L(G)$。
+
+##### 由DFA构造正则文法的一般步骤
+
+令$V_N=Q,V_T=\Sigma,S=q_0$。
+
+- 如果$C\in \delta(B,a),B,C\in Q,a\in \Sigma$，则在$P$中有产生式$B\to aC$
+- 如果$C\in\delta(B,a),C\in F$，则在$P$中有产生式$B\to a$
+
+定理：如果$M$是一个DFA，则存在一个正则文法$G=(V_N,V_T,P,S)$，使得：$L(G)=T(M)$。
+
+### 下推自动机与CFG
 
 ### 有限自动机在NLP中的应用
 
